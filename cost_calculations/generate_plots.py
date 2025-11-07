@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from argparse import ArgumentParser
 from multicolorline import colored_line
 
+### example usage
+# python3 generate_plots.py --two-server-path 2serverfig.png --multi-server-path multiserverfig.png --detailed-two-server-path detailed_2serverfig.png --detailed-multi-server-path detailed_multiserverfig.png
+
 ### utils for generating plots
 ymax = 5
 

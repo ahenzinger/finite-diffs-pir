@@ -110,12 +110,12 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
             else:
                 if not use_finite_differences:
                     assert d != 1
-                    lbl = 'This work (individual degree > 1, precomputed derivatives)'
+                    lbl = 'This work, theorem 5.4 (individual degree > 1, precomputed derivatives)'
                 else:
                     if d == 1:
-                        lbl = 'This work (individual degree 1, finite differences)' if s > 2 else 'This work (finite differences)'
+                        lbl = 'This work (individual degree 1, finite differences)' if s > 2 else 'This work, theorem 3.2 (finite differences)'
                     else:
-                        lbl = 'This work (individual degree > 1, finite differences)'
+                        lbl = 'This work, theorem 5.3 (individual degree > 1, finite differences)'
 
                 xs, ys = prune_worse_values(xs, ys)
 
@@ -138,7 +138,7 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
                 marker='*',
                 s=100,
                 color='red',
-                label="This work, corollary 3.2" if idx == 0 else None,
+                label="This work, corollary 3.4" if idx == 0 else "This work, corollary 3.3",
             )
     elif fdiffs != 0:
         x = server_online_time((q-1)/2, q-1, s, q, use_finite_differences=True)
@@ -149,7 +149,7 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
             marker='*',
             s=100,
             color='red',
-            label="This work, corollary 4.4" if (show_lbls != 'none') else None,
+            label="This work, corollary D.11" if (show_lbls != 'none') else None,
         )
 
 def plot_glmds_schemes(s, q, ax, convex=True, lbl_6_4=None, lbl_4_9=None):

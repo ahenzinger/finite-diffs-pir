@@ -149,25 +149,24 @@ func shrinkDBToIntegerSz(p *Params) {
 
 func BenchmarkLatencyPIR(b *testing.B) {
     fmt.Println("Benchmark DEPIR, latency")
-	p := new(Params)
-    p.M, p.D = 40, 19
+    p := new(Params)
+    p.M, p.D = 35, 9
     p.N = Binomial(p.M, p.D)
-	p.Record_len = 1
-	shrinkDBToIntegerSz(p)
+    p.Record_len = 1
+    //shrinkDBToIntegerSz(p)
 
-	enc := FakeEncodeDatabase(p)
-	RunFakePIRWithParams(enc, p)
+    enc := FakeEncodeDatabase(p)
+    RunFakePIRWithParams(enc, p)
 }
 
 func BenchmarkTputPIR(b *testing.B) {
-	fmt.Println("Benchmark DEPIR, tput")
+    fmt.Println("Benchmark DEPIR, tput")
 
-	p := new(Params) 
-    p.M, p.D = 35, 17
+    p := new(Params) 
+    p.M, p.D = 35, 9
     p.N = Binomial(p.M, p.D)
-    p.Record_len = 32
-	shrinkDBToIntegerSz(p)
+    p.Record_len = 1
 
-	enc := FakeEncodeDatabase(p)
-	BenchFakeTput(enc, p)
+    enc := FakeEncodeDatabase(p)
+    BenchFakeTput(enc, p)
 }

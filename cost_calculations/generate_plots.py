@@ -110,12 +110,12 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
             else:
                 if not use_finite_differences:
                     assert d != 1
-                    lbl = 'This work, theorem 5.4 (individual degree > 1, precomputed derivatives)'
+                    lbl = 'This work, theorem 25 (individual degree > 1, precomputed derivatives)'
                 else:
                     if d == 1:
-                        lbl = 'This work (individual degree 1, finite differences)' if s > 2 else 'This work, theorem 3.2 (finite differences)'
+                        lbl = 'This work (individual degree 1, finite differences)' if s > 2 else 'This work (finite differences)'
                     else:
-                        lbl = 'This work, theorem 5.3 (individual degree > 1, finite differences)'
+                        lbl = 'This work, theorem 24 (individual degree > 1, finite differences)'
 
                 xs, ys = prune_worse_values(xs, ys)
 
@@ -138,7 +138,7 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
                 marker='*',
                 s=100,
                 color='red',
-                label="This work, corollary 3.4" if idx == 0 else "This work, corollary 3.3",
+                label="This work, informal theorem 2" if idx == 0 else "This work, informal theorem 1",
             )
     elif fdiffs != 0:
         x = server_online_time((q-1)/2, q-1, s, q, use_finite_differences=True)
@@ -149,7 +149,7 @@ def plot_our_schemes(s, q, fig, ax, show_lbls='none', color=False, fdiffs=None, 
             marker='*',
             s=100,
             color='red',
-            label="This work, corollary D.11" if (show_lbls != 'none') else None,
+            label="This work, quasilinear storage" if (show_lbls != 'none') else None,
         )
 
 def plot_glmds_schemes(s, q, ax, convex=True, lbl_6_4=None, lbl_4_9=None):
@@ -227,18 +227,18 @@ if __name__ == '__main__':
 
     if args.multi_server_path is not None:
         # multi-server case
-        fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(32, 5))
-        for idx, q in enumerate([3, 5, 11]):
-            plot_our_schemes(q, q, fig, ax[idx], show_lbls='label' if q == 11 else 'none')
+        fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(25, 5), sharey=True)
+        for idx, q in enumerate([3, 5]):
+            plot_our_schemes(q, q, fig, ax[idx], show_lbls='label' if q == 5 else 'none')
             plot_glmds_schemes(q, q, ax[idx],
-                lbl_6_4="GLM+24, theorem 6.4 (individual degree 1, precomputed derivatives)" if q == 11 else None,
-                lbl_4_9='GLM+24, theorem 4.9 (only restrict individual degree)' if q == 11 else None,
+                lbl_6_4="GLM+24, theorem 6.4 (individual degree 1, precomputed derivatives)" if q == 5 else None,
+                lbl_4_9='GLM+24, theorem 4.9 (only restrict individual degree)' if q == 5 else None,
             )
             format_plot(q, ax[idx],
                 arrow_xy_override=(0.8, 0.8),
                 fontsize='xx-large',
             )
-        ax[3].set_axis_off() # the 4th subplot is just a hack to fit the legend in
+        ax[2].set_axis_off() # the 3rd subplot is just a hack to fit the legend in
         fig.legend(loc='center right', fontsize='xx-large')
         fig.savefig(args.multi_server_path)
         del fig, ax

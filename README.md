@@ -49,7 +49,7 @@ To run the PIR protocol, install [Go](https://go.dev/) (tested with version 1.22
 
 To produce the plots, additionally install [Python 3](https://www.python.org/downloads/), [NumPy](https://numpy.org/) and [Matplotlib](https://matplotlib.org/).
 
-To run on machines that do not support the `-march=native` C compiler flag, it is possible to remove this flag from `pir.go` at some performance degradation.
+To run on machines that do not support the `-march=native` or `-mavx2` C compiler flags, it is possible to remove these flags from `pir.go` at some performance degradation.
 
 ## Usage: Running the PIR scheme
 
@@ -72,7 +72,7 @@ ok      github.com/ahenzinger/finite-diffs-pir/pir      133.823s
 
 ### Performance benchmarks
 
-To benchmark our PIR scheme's latency, throughput (without networking), storage, or communication with given database parameters (i.e., a given choice of the number of variables `m` and the total degree `D` and a given record length in bytes), update the corresponding values of `m`, `D`, and `Record_len` in the functions `BenchmarkLatencyPIR` and `BenchmarkTputPIR` in  `pir_test.go`. Then, run:
+To benchmark our PIR scheme's latency, throughput (without networking), storage, or communication with given database parameters (i.e., a given choice of the number of variables `m` and the total degree `D` and a given record length in bytes), update the corresponding values of `m`, `D`, and `Record_len` in the functions `BenchmarkLatencyPIR` and `BenchmarkTputPIR` in  `pir_test.go`. The parameters must satisfy `D ≤ m` and `D` must be odd (the parameter-selection routine `PickParams` in `polynomial.go` enforces this automatically). Then, run:
 ```
 cd pir/
 go test --bench PIR --run Benchmark
@@ -131,6 +131,21 @@ PASS
 ok      github.com/ahenzinger/finite-diffs-pir/pir      220.400s
 ```
 On the `r7a-4xlarge` machine, the command runs in under 4 minutes.
+
+#### Mapping benchmark output to Table 2
+
+The following table shows how the logged output lines correspond to the columns of [Table 2](https://eprint.iacr.org/2025/2008.pdf) in the full version of the paper. Values shown are from the example run above (`m=35`, `D=9`, `Record_len=1`).
+
+| Table 2 column | Log line to read | Example value |
+|---|---|---|
+| **DB size** | `original db size: X GB` | 0.066 GB |
+| **Encoding size** | `encoded to X GB` | 32 GB |
+| **Upload** | `query size: X bits` | 64 bits |
+| **Download** | `answer size: X KB = X MB` | 58.1 KB (0.057 MB) |
+| **# memory accesses** | Same as download: the answer size in bytes equals the number of memory accesses (one byte per access for 1-byte records; for `k`-byte records, divide by `k`) | 59,536 |
+| **Latency** | `average answer time per query: X s` | 0.000918 s |
+| **Throughput** | Last `Tput:` line (steady-state) in the throughput section | 13,683 queries/s |
+| **BIM04 storage comparison** | `BIM storage would be: X TB --> worse by Y x` | BIM04 would need 1,860.5 TB (59,536x worse) |
 
 ## Reproducing results from the paper
 

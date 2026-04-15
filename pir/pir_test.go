@@ -60,11 +60,6 @@ func TestEncodingSmall(t *testing.T) {
 	testEncoding(t, 10, 1, 0.5)
 }
 
-//func TestEncodingMed(t *testing.T) {
-//        fmt.Println("TestEncodingMed")
-//        testEncoding(t, 1000 * 8, 1, 0.5) 
-//}
-
 func testPIR(t *testing.T, N, record_len int, theta float64) {
 	RunPIR(N, record_len, theta)
 }
@@ -104,21 +99,6 @@ func TestPIRMed10240(t *testing.T) {
         testPIR(t, 1024 * 7, 10240, 0.5)
 }
 
-//func TestPIRMed102400(t *testing.T) {
-//       fmt.Println("TestPIRMed102400")
-//       testPIR(t, 1024 * 3, 102400, 0.5)
-//}
-/*
-func TestPIRBig1(t *testing.T) {
-    fmt.Println("TestPIRBig1")
-    testPIR(t, 100 * 1024 * 8, 1, 0.5)
-}
-
-func TestPIRBig10(t *testing.T) {
-    fmt.Println("TestPIRBig10")
-    testPIR(t, 10 * 1024 * 8, 10, 0.5)
-}*/
-
 func testFakePIR(t *testing.T, N, record_len int, theta float64) {
     RunFakePIR(N, record_len, theta)
 }
@@ -141,19 +121,12 @@ func TestFakePIRBig10(t *testing.T) {
     testFakePIR(t, 1024 * 1024, 2000, 0.5)
 }
 
-// shrink N to make the GB of the database the largest integer <= N
-func shrinkDBToIntegerSz(p *Params) {
-    dbsz := int(BytesToGB(p.N * p.Record_len))
-    p.N = (dbsz * 1024 * 1024 * 1024) / p.Record_len
-}
-
 func BenchmarkLatencyPIR(b *testing.B) {
     fmt.Println("Benchmark DEPIR, latency")
     p := new(Params)
     p.M, p.D = 35, 9
     p.N = Binomial(p.M, p.D)
     p.Record_len = 1
-    //shrinkDBToIntegerSz(p)
 
     enc := FakeEncodeDatabase(p)
     RunFakePIRWithParams(enc, p)

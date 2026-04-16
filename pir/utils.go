@@ -3,31 +3,13 @@ package pir
 import (
 	"os"
 	"fmt"
+	"time"
 	"runtime"
 	"runtime/pprof"
 	"sync"
-	"math/rand"
 	"math"
-	"time"
 	"unsafe"
-	_ "unsafe"
 )
-
-func BitsToKB(bits int) float64 {
-        return float64(bits) / 8 / 1024
-}
-
-func BitsToMB(bits int) float64 {
-        return float64(bits) / 8 / 1024 / 1024 
-}
-
-func BitsToGB(bits int) float64 {
-		return float64(bits) / 8 / 1024 / 1024 / 1024
-}
-
-func BitsToTB(bits int) float64 {
-        return float64(bits) / 8 / 1024 / 1024 / 1024 / 1024
-}
 
 func BytesToKB(b int) float64 {
         return float64(b) / 1024
@@ -45,12 +27,14 @@ func BytesToTB(b int) float64 {
         return float64(b) / 1024 / 1024 / 1024 / 1024
 }
 
-// Note: does not use cryptographically secure randomness
 func RandVec(length int) []bool {
         v := make([]bool, length)
+	seed := RandomPRGKey()
+	prg := NewBufPRG(NewPRG(seed))
 
         for i := 0; i < length; i++ {
-                v[i] = (rand.Intn(2) == 1)
+		val := prg.Uint64()
+                v[i] = ((val % 2) == 1)
         }
 
         return v
@@ -80,16 +64,19 @@ func RandByteVec(length int) []byte {
 					return
 				}
 
+				seed := RandomPRGKey()
+        			prg := NewBufPRG(NewPRG(seed))
+
 				// Fill in 8‐byte chunks by reinterpreting the slice as []uint64
 				filled := l / 8
 				u64s := unsafe.Slice((*uint64)(unsafe.Pointer(&v[start])), filled)
 				for i, _ := range u64s {
-					u64s[i] = rand.Uint64()
+					u64s[i] = prg.Uint64()
 				}
 	
-        		for i := filled * 8; i < l; i++ {
-                		v[start + i] = byte(rand.Intn(maxByte))
-        		}
+        			for i := filled * 8; i < l; i++ {
+                			v[start + i] = byte(prg.Uint64() % uint64(maxByte))
+        			}
 			}(w)	
 		}
 

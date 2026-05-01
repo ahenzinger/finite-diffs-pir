@@ -6,7 +6,10 @@ import numpy as np
 from matplotlib.collections import LineCollection
 
 # Pasted from https://matplotlib.org/stable/gallery/lines_bars_and_markers/multicolored_line.html
+# © Copyright 2002–2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the Matplotlib development team; 2012–2026 The Matplotlib development team.
 
+# Used under the matplotlib license (BSD-compatible, PSF-based):
+# https://matplotlib.org/stable/project/license.html
 
 def colored_line(x, y, c, ax, **lc_kwargs):
     """
